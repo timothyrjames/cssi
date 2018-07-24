@@ -1,0 +1,196 @@
+<html>
+  <head>
+    <script>
+
+// This constant is used throughout the script to output debug messages to the console.
+const DEBUG = true;
+
+function sendData(toUrl, callbackFunction, params) {
+  // first, we create an XHR
+  let xmlHttp = new XMLHttpRequest();
+  xmlHttp.onreadystatechange = function() {
+    // if we have readyState == 4, that means the request is done. 
+    if (xmlHttp.readyState === 4) {
+      if (DEBUG) {
+        // if we're debugging, output the entire response received from the server
+        console.log('The response received:\n' + xmlHttp.responseText);
+      }
+      // turn the response text into a proper JavaScript object
+      let responseObject = JSON.parse(xmlHttp.responseText);
+      
+      // if we have an error, handle it using the function below.
+      if (responseObject.error) {
+        handleError(responseObject.error);
+      }
+      
+      // we'll call this callbackFunction, that will be supplied by the caller of sendData.
+      callbackFunction(responseObject);
+    }
+  };
+  
+  // we use the following lines to create a parameter string.
+  let parameters = '';
+  if (params) {
+    for (let param in params) {
+      parameters += escape(param) + '=' + escape(params[param]) + '&';
+    }
+  }
+  
+  
+  if (DEBUG) {
+    // if we're debugging, output the URL where we're sending our data.
+    console.log("Opening connection to " + toUrl);
+  }
+  xmlHttp.open("POST", toUrl, true);
+  xmlHttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  if (DEBUG) {
+    // if we're debugging, output the parameters we're sending.
+    console.log("Sending parameters: " + parameters);
+  }
+  xmlHttp.send(parameters);
+}
+
+function clearError() {
+  // used for convenience - just clear the error from the error message area.
+  handleError('');
+}
+
+function handleError(msg) {
+  // set the error message in the proper area (i.e., the DIV tag for errors)
+  document.getElementById("error").innerHTML = msg;
+}
+
+function loadModels() {
+  // call to the server's /models URL, and call the anonymous function when we're done
+  sendData('/models', function(result) {
+    
+      // we'll use this text variable to form HTML to insert into our page.
+      let text = '';
+      
+      // if we have a result, and the result has models, and models has at least one model
+      if (result && result.models && result.models.length) {
+
+        // if there are models, iterate over them and build HTML output to render.
+        for (let i = 0; i < result.models.length; i++) {
+          text += '<a href="javascript:loadModel(\'';
+          text += result.models[i].key;
+          text += '\');">';
+          text += result.models[i].title;
+          text += '</a><br>';
+        }
+      } else {
+        // if there are no models, tell the user this.
+        text += 'There are no models.';
+      }
+      text += '<br>';
+      text += '<button onclick="showCreateModel();">Create New Model</button>';
+      
+      // set the HTML we created in "text" to the maincontent DIV tag.
+      document.getElementById('maincontent').innerHTML = text;
+    });
+}
+
+function showCreateModel() {
+  // this function just builds the HTML for a simple form for adding a new model.
+  clearError();
+  let text = '';
+  text += 'Title:<br><input id="modeltitle"><br><br>';
+  text += 'Text:<br><textarea id="modeltext"></textarea>';
+  text += '<br><br><button onclick="loadModels();">Cancel</button> ';
+  text += '<button onclick="saveModel();">Save</button>';
+  document.getElementById('maincontent').innerHTML = text;
+}
+
+function saveModel() {
+  // if there's an error, clear it, because we might need to report something new there.
+  clearError();
+
+  // we retrieve the form values.
+  let title = document.getElementById("modeltitle").value;
+  let text = document.getElementById("modeltext").value;
+
+  // the only validation we'll do here is to check the title's length.
+  if (title.length > 500) {
+    handleError("Title should be less than 500 characters.");
+  } else {
+  	
+  	// build a parameters object so we can send it with our request
+    let parameters = {
+      "title": title,
+      "text": text
+    };
+    
+    sendData("/add", function(result) {
+      if (result && result.ok) {
+        loadModels();
+      } else {
+        // no result object, probably some error occurred
+      }
+    }, parameters);
+  }
+}
+
+
+function loadModel(key) {
+  // call to the server's /model URL and call the anonymous function below when it's done
+  sendData('/model', function(result) {
+    if (result) {
+      // if we have a result, we'll build some HTML in this "text" variable
+      let text = '';
+      text += '<h3>' + result.title + '</h3>';
+      text += '<b> by ' + result.author + '</b><br><br>';
+      text += result.text;
+      
+      // this A tag will allow us to call a JavaScript function when the link is clicked.
+      text += '<br><br><a href="javascript:loadModels();">Show All Models</a>';
+      
+      // set the HTML we created in "text" to the maincontent DIV tag.
+      document.getElementById('maincontent').innerHTML = text;
+    }
+  }, {"key": key});
+}
+
+// when the page is loaded, we'll use this code to check to see if a user is logged in.
+sendData('/user', function(result) {
+  if (result && result.user) {
+    // if a user exists (i.e., it's not null), then we load models.
+    loadModels();
+  } else {
+    // if we don't have a valid user here, we know we need to login.
+    let text = '<a href="';
+    text += result.login;
+    text += '">Click here to log in.</a>';
+    document.getElementById('maincontent').innerHTML = text;
+  }
+});
+
+
+
+    </script>
+    <style>
+      #error {
+        color: red;
+        font-weight: bold;
+      }
+      #maincontent {
+        border: 10px solid lightgreen;
+        padding: 20px;
+      }
+      a {
+        font-weight: bold;
+        color: blue;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      body {
+        font-family: Verdana;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="error"></div>
+    <div id="maincontent"></div>
+  </body>
+</html>
