@@ -1,0 +1,33 @@
+<html>
+    <head>
+        <style>
+            #chatwindow {
+                height: 50%;
+                width: 60%;
+                border: 1px solid #000000;
+            }
+            #chatmsg {
+                width: 50%;
+            }
+            #chatsubmit {
+                width: 10%;
+            }
+        </style>
+        <script>
+            // This function refreshes our chat window every 3 seconds.
+            setInterval(function() {
+                document.getElementById('chat_window').src = document.getElementById('chat_window').src;   
+            }, 3000);
+        </script>
+    </head>
+    <body>
+        <iframe id="chatwindow" src="/chat#end"></iframe>
+
+        <form method="post" action="/send">
+            <input type="text" id="chatmsg" name="chatmsg"> <input id="chatsubmit" type="submit">
+        </form>
+        <script>
+            document.getElementById('chatmsg').focus();
+        </script>
+    </body>
+</html>
