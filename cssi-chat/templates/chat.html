@@ -1,0 +1,19 @@
+<html>
+    <head>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                font-size: 10pt;
+            }
+        </style>
+    </head>
+    <body>
+        {% for message in messages %}
+        <p>
+            <b>{{ message.timestamp }} {{message.user}}</b>:
+            <blockquote>{{message.text}}</blockquote>
+        </p>
+        {% endfor %}
+        <a name="end" id="end"></a>
+    </body>
+</html>
