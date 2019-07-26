@@ -1,0 +1,25 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="/i/style.css">
+    </head>
+    <body>
+        <div id="topmenu">
+            <a href="/">Home</a>
+            <a href="/profile-list">Recent Profiles</a>
+            {% if login_url %}
+            <a href="{{login_url}">Login</a>
+            {% else %}
+            <a href="/p/{{name}}">View Profile</a>
+            <a href="/profile-edit">Edit Profile</a>
+            <a href="{{logout_url}}">Logout</a>
+            {% endif %}
+        </div>
+        {% if successmsg %}
+        <div id="successmsg">{{successmsg|linebreaks}}</div>
+        {% endif %}
+        {% if errormsg %}
+        <div id="errormsg">{{errormsg|linebreaks}}</div>
+        {% endif %}
+        {% block content %}{% endblock %}
+    </body>
+</html>
