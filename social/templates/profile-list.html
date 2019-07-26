@@ -1,0 +1,14 @@
+{% extends "_base.html" %}
+{% block content %}
+
+<table>
+
+    {% for profile in profiles %}
+    <tr>
+        <td><a href="/p/{{profile.name}}">{{profile.name}}</a></td>
+        <td>- updated {{profile.last_update}}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}
