@@ -1,0 +1,38 @@
+body {
+    font-family: Helvetica, sans-serif;
+    font-size: 14pt;
+}
+
+a {
+    text-decoration: underline;
+    color: green;
+}
+
+a:hover {
+    text-decoration: none;
+    color: black;
+}
+
+#topmenu {
+    padding-bottom: 10px;
+}
+
+#successmsg {
+    font-weight: bold;
+    color: blue;
+    padding-bottom: 10px;
+}
+
+#errormsg {
+    font-weight: bold;
+    color: red;
+    padding-bottom: 10px;
+}
+
+#profilename {
+    width: 60vw;
+}
+
+#profiledescription {
+    width: 60vw;
+}
