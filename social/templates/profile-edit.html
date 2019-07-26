@@ -1,0 +1,12 @@
+{% extends "_base.html" %}
+{% block content %}
+
+<form method="post" action="/profile-save">
+    Name:<br>
+    <input id="profilename" type="text" name="name" value="{{name}}"><br><br>
+    Profile:<br>
+    <textarea id="profiledescription" name="description" rows="16">{{description}}</textarea><br><br>
+    <input type="submit">
+</form>
+
+{% endblock %}
