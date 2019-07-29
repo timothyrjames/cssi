@@ -1,0 +1,12 @@
+<html>
+    <body>
+        <h1>Images Demo</h1>
+        {% if logout_url %}
+            <a href="/">Upload</a> | 
+            <a href="/images">My Images</a> | 
+            <a href="{{logout_url}}">Sign Out</a><br><br>{% block bodycontent %}{% endblock %}
+        {% else %}
+            <a href="{{login_url}}">Sign In</a><br><br>Please sign in.
+        {% endif %}
+    </body>
+</html>
