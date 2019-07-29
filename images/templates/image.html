@@ -1,0 +1,28 @@
+{% extends "_base.html" %}
+{% block bodycontent %}
+<h2>Image: {{image_name}}</h2>
+<br><br>
+100x100:<br>
+<img src="/img?id={{image_id}}&width=100&height=100" border="0">
+<br><br>
+400x200:<br>
+<img src="/img?id={{image_id}}&width=400&height=200" border="0">
+<br><br>
+400x200, fit:<br>
+<img src="/img?id={{image_id}}&width=400&height=200&fit=true" border="0">
+<br><br>
+Lucky:<br>
+<img src="/img?id={{image_id}}&opt=true" border="0">
+<br><br>
+Flipped:<br>
+<img src="/img?id={{image_id}}&flip=true" border="0">
+<br><br>
+Mirrored:<br>
+<img src="/img?id={{image_id}}&mirror=true" border="0">
+<br><br>
+Rotated 90:<br>
+<img src="/img?id={{image_id}}&rotate=90" border="0">
+<br><br>
+Rotated 270:<br>
+<img src="/img?id={{image_id}}&rotate=270" border="0">
+{% endblock %}
