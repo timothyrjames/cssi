@@ -1,0 +1,9 @@
+cron:
+- description: daily cleanup
+  url: /tasks/minutetask
+  schedule: every 30 minutes
+  
+- description: Wednesday evening mail
+  url: /tasks/wedmail
+  schedule: every wednesday 19:31
+  timezone: America/New_York
