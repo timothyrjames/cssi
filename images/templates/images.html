@@ -1,0 +1,9 @@
+{% extends "_base.html" %}
+{% block bodycontent %}
+<h2>Images</h2>
+{% for image in images %}
+<a href="/image?id={{image.key.urlsafe}}">{{image.name}}</a>
+{% empty %}
+There are no images.
+{% endfor %}
+{% endblock %}
