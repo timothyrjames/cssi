@@ -1,0 +1,11 @@
+runtime: python27
+api_version: 1
+threadsafe: yes
+
+handlers:
+- url: /tasks/.*
+  script: crontasks.app
+  login: admin
+
+- url: /.*
+  script: main.app
